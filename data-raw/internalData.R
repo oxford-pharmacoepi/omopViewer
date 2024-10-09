@@ -64,8 +64,20 @@ backgroundKeywords <- dplyr::tribble(
   "footer", "bslib::card_footer", "https://rstudio.github.io/bslib//reference/card_body.html"
 )
 
+omopViewerThemes <- list(
+  theme1 = "bslib::bs_theme(
+    bootswatch = 'sandstone',
+    primary = '#605ca8',
+    bg = 'white',
+    fg = 'black',
+    success = '#3B9AB2',
+    base_font = bslib::font_google('Space Mono'),
+    code_font = bslib::font_google('Space Mono')
+  )"
+)
+
 usethis::use_data(
   omopViewerTabs, omopViewerPlots, omopViewerPlotArguments, omopViewerProj,
-  omopViewerGlobal, logoKeywords, backgroundKeywords, overwrite = TRUE,
-  internal = TRUE)
+  omopViewerGlobal, logoKeywords, backgroundKeywords, omopViewerThemes,
+  overwrite = TRUE, internal = TRUE)
 

@@ -36,7 +36,10 @@ content will be controlled from the generated background.md file.}
 by the available result types in the result object. Panels for any available
 results not specified will be included after the specified result tabs.}
 
-\item{theme}{Assign a theme to the shiny app using bslib::bs_theme()}
+\item{theme}{Specify the theme for the Shiny application. You can either select a predefined
+theme provided by the package (e.g., `"theme1"`), or define a custom theme using `bslib::bs_theme()`.
+If using a custom theme, it must be provided as a character string (e.g., `"bslib::bs_theme(bg = 'white', fg = 'black')"`).
+The custom theme allows for advanced customization of the app's appearance, including colours, fonts, and other styling options.}
 
 \item{open}{Whether to open the shiny app project.}
 }
@@ -50,7 +53,7 @@ Export and launch a static shiny specific to the provided results.
 {
 exportStaticApp(
   result = emptySummarisedResult(),
-  theme = "bslib::bs_theme(bg = '#bb0a1e', fg = '#0000ff')"
+  theme = "theme1"
 )
 }
 

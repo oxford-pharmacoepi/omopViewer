@@ -14,7 +14,10 @@
 #' by the available result types in the result object. Panels for any available
 #' results not specified will be included after the specified result tabs.
 #' @param open Whether to open the shiny app project.
-#' @param theme Assign a theme to the shiny app using bslib::bs_theme()
+#' @param theme Specify the theme for the Shiny application. You can either select a predefined
+#' theme provided by the package (e.g., `"theme1"`), or define a custom theme using `bslib::bs_theme()`.
+#' If using a custom theme, it must be provided as a character string (e.g., `"bslib::bs_theme(bg = 'white', fg = 'black')"`).
+#' The custom theme allows for advanced customization of the app's appearance, including colours, fonts, and other styling options.
 #'
 #' @return The shiny app will be created in directory.
 #'
@@ -23,7 +26,7 @@
 #' @examples {
 #' exportStaticApp(
 #'   result = emptySummarisedResult(),
-#'   theme = "bslib::bs_theme(bg = '#bb0a1e', fg = '#0000ff')"
+#'   theme = "theme1"
 #' )
 #' }
 #'
@@ -43,7 +46,6 @@ exportStaticApp <- function(result,
   omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
   omopgenerics::assertCharacter(title, length = 1)
   omopgenerics::assertLogical(summary, length = 1)
-  omopgenerics::assertCharacter(theme, length = 1, null = TRUE)
   omopgenerics::assertLogical(background, length = 1)
   sum <- validateSummary(summary, result)
   directory <- validateDirectory(directory)
@@ -52,6 +54,7 @@ exportStaticApp <- function(result,
   }
   resType <- omopgenerics::settings(result)[["result_type"]] |> unique()
   panels <- validatePanels(panels, resType)
+  theme <- validateTheme(theme)
 
   # processing data
   cli::cli_inform(c("i" = "Processing data"))
@@ -181,6 +184,8 @@ logoPath <- function(logo) {
   }
 }
 
+
+
 # ui ----
 uiStatic <- function(choices = list(),
                      logo = NULL,
@@ -189,22 +194,11 @@ uiStatic <- function(choices = list(),
                      summary = NULL,
                      theme = NULL,
                      panels = list()) {
-  # initial checks
-  omopgenerics::assertList(choices, named = TRUE)
-  omopgenerics::assertCharacter(logo, length = 1, null = TRUE)
-  omopgenerics::assertCharacter(title, length = 1)
-
-  # Create the bslib::bs_theme() call, or use NULL if not provided
-  theme_setting <- if (!is.null(theme)) {
-    paste0("theme = ", theme, ",")
-  } else {
-    ""
-  }
   c(
     "ui <- bslib::page_navbar(",
-    theme_setting,
     c(
       pageTitle(title, logo),
+      pageTheme(theme),
       createBackground(background),
       createSummary(summary, logo),
       createUi(choices, panels),
